@@ -58,7 +58,7 @@ export default function LoginPage() {
     <div className="w-full max-w-sm">
       <Card className="shadow-lg border-0 shadow-black/5">
         <CardHeader className="items-center pb-2 pt-8">
-          <div className="mb-3 flex size-12 items-center justify-center rounded-xl bg-brand text-primary-foreground">
+          <div className="mb-3 flex size-12 items-center justify-center rounded-xl bg-brand-green text-brand-green-text">
             <LogoIcon className="size-6" />
           </div>
           <CardTitle className="text-xl tracking-tight">

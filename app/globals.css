@@ -116,6 +116,42 @@
   --color-brand: var(--brand);
   --color-transparent: var(--transparent);
 
+  /* Reference chrome (sampled from assets/reference-chrome-greens.png) */
+  --color-ref-brand-logo: var(--ref-brand-logo);
+  --color-ref-brand-avatar: var(--ref-brand-avatar);
+  --color-ref-brand-avatar-foreground: var(--ref-brand-avatar-foreground);
+  --color-ref-status-archived: var(--ref-status-archived);
+  --color-ref-row-selected: var(--ref-row-selected);
+
+  /* Exceptions / product polish palette */
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-navy-selected-bg: var(--navy-selected-bg);
+  --color-navy-selected-border: var(--navy-selected-border);
+  --color-app-page-bg: var(--app-page-bg);
+  --color-app-surface: var(--app-surface);
+  --color-app-surface-muted: var(--app-surface-muted);
+  --color-app-border: var(--app-border);
+  --color-app-border-strong: var(--app-border-strong);
+  --color-app-text-primary: var(--app-text-primary);
+  --color-app-text-secondary: var(--app-text-secondary);
+  --color-app-text-muted: var(--app-text-muted);
+  --color-app-amber: var(--app-amber);
+  --color-app-amber-bg: var(--app-amber-bg);
+  --color-app-amber-text: var(--app-amber-text);
+  --color-app-green: var(--app-green);
+  --color-app-green-bg: var(--app-green-bg);
+  --color-app-green-border: var(--app-green-border);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-text: var(--brand-green-text);
+  --color-brand-green-outline: var(--brand-green-outline);
+  --color-app-slate: var(--app-slate);
+  --color-app-slate-bg: var(--app-slate-bg);
+  --color-sidebar-nav-active-bg: var(--sidebar-nav-active-bg);
+  --color-sidebar-nav-inactive: var(--sidebar-nav-inactive);
+
   --color-alternate-1: var(--alternate-1);
   --color-alternate-2: var(--alternate-2);
   --color-alternate-3: var(--alternate-3);
@@ -135,8 +171,9 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: var(--brand-15);
-  --primary-foreground: oklch(0.269 0 0);
+  /* Navy primary (CTAs) — aligned with sidebar rail */
+  --primary: oklch(0.3 0.095 258.2);
+  --primary-foreground: oklch(0.99 0.004 258);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -159,16 +196,47 @@
   --chart-9: var(--brand-55);
   --chart-10: var(--brand-60);
 
-  --sidebar: oklch(0.922 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.87 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --sidebar-muted: oklch(0.715 0 0);
-  --button-primary: var(--brand-10);
+  /* Approved exceptions / shell palette (define before --sidebar references) */
+  --navy-950: #061f3d;
+  --navy-900: #082a4d;
+  --navy-800: #0d335e;
+  --navy-700: #12365f;
+  --navy-selected-bg: #f5f8fc;
+  --navy-selected-border: #afc4e8;
+  --app-page-bg: #f5f7fa;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f8fafc;
+  --app-border: #e5eaf0;
+  --app-border-strong: #cbd5e1;
+  --app-text-primary: #0b1f3a;
+  --app-text-secondary: #64748b;
+  --app-text-muted: #7a8797;
+  --app-amber: #f59e0b;
+  --app-amber-bg: #fff7e6;
+  --app-amber-text: #b45309;
+  --app-green: #55c85a;
+  --app-green-bg: #f2fbf3;
+  --app-green-border: #bfe7c2;
+  --brand-green: #a7e957;
+  --brand-green-text: #2f6b2f;
+  --brand-green-outline: #7bcb3a;
+  --app-slate: #64748b;
+  --app-slate-bg: #f3f6fa;
+  --sidebar-nav-active-bg: rgb(255 255 255 / 0.12);
+  --sidebar-nav-inactive: #94a3b8;
+  --app-card-shadow: 0 1px 2px rgb(16 24 40 / 0.06);
+
+  /* Sidebar rail — approved navy frame */
+  --sidebar: var(--navy-950);
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: var(--navy-800);
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: var(--sidebar-nav-active-bg);
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: rgb(255 255 255 / 0.08);
+  --sidebar-ring: #94a3b8;
+  --sidebar-muted: var(--sidebar-nav-inactive);
+  --button-primary: oklch(0.28 0.088 258.2);
 
   --success: oklch(0.635 0.185 147.775);
   --success-foreground: oklch(0.941 0.023 151.642);
@@ -201,6 +269,18 @@
   --brand-50: oklch(0.599 0.137 116.248);
   --brand-55: oklch(0.555 0.127 115.832);
   --brand-60: oklch(0.509 0.116 115.905);
+
+  /*
+   * Reference greens — traceability: `npx tsx scripts/sample-reference-greens.ts`
+   * (assets/reference-chrome-greens.png). Tokens follow script output for logo, avatar mean,
+   * and row tint; --ref-status-archived is hue-aligned to the logo (no isolated forest glyph in raster).
+   */
+  --ref-brand-logo: rgb(123 172 122);
+  --ref-brand-avatar: rgb(185 219 169);
+  /* WCAG ~11.7:1 vs avatar fill (white fails on this mint) */
+  --ref-brand-avatar-foreground: oklch(0.22 0.035 260);
+  --ref-status-archived: oklch(0.42 0.09 143);
+  --ref-row-selected: rgb(248 253 248);
 }
 
 .dark {
@@ -210,8 +290,8 @@
   --card-foreground: oklch(0.985 0.001 106.424);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: var(--brand);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.58 0.11 258.2);
+  --primary-foreground: oklch(0.12 0.04 258);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -234,16 +314,16 @@
   --chart-9: var(--brand-50);
   --chart-10: var(--brand-55);
 
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.715 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-  --sidebar-muted: oklch(0.439 0 0);
-  --button-primary: var(--brand);
+  --sidebar: oklch(0.22 0.065 258.2);
+  --sidebar-foreground: oklch(0.92 0.018 258);
+  --sidebar-primary: oklch(0.48 0.1 258.2);
+  --sidebar-primary-foreground: oklch(0.99 0.004 258);
+  --sidebar-accent: oklch(0.3 0.075 258.2);
+  --sidebar-accent-foreground: oklch(0.98 0.01 258);
+  --sidebar-border: oklch(0.38 0.05 258 / 0.35);
+  --sidebar-ring: oklch(0.62 0.1 258.2);
+  --sidebar-muted: oklch(0.64 0.04 258.2);
+  --button-primary: oklch(0.55 0.105 258.2);
 
   --warning: oklch(0.837 0.164 84.429);
   --warning-foreground: oklch(0.369 0.076 86.33);
@@ -276,6 +356,43 @@
   --brand-50: oklch(0.599 0.137 116.248);
   --brand-55: oklch(0.555 0.127 115.832);
   --brand-60: oklch(0.509 0.116 115.905);
+
+  /* Mirror reference chrome so rail/login do not drift from the mock in dark mode */
+  --ref-brand-logo: rgb(123 172 122);
+  --ref-brand-avatar: rgb(185 219 169);
+  --ref-brand-avatar-foreground: oklch(0.22 0.035 260);
+  --ref-status-archived: oklch(0.42 0.09 143);
+  --ref-row-selected: rgb(248 253 248);
+
+  /* Light-first polish tokens; dark mode keeps readable contrast */
+  --navy-950: #020617;
+  --navy-900: #0f172a;
+  --navy-800: #1e293b;
+  --navy-700: #334155;
+  --navy-selected-bg: rgb(30 41 59 / 0.45);
+  --navy-selected-border: rgb(148 163 184 / 0.45);
+  --app-page-bg: oklch(0.17 0.02 260);
+  --app-surface: oklch(0.2 0.02 260);
+  --app-surface-muted: oklch(0.22 0.02 260);
+  --app-border: oklch(1 0 0 / 0.08);
+  --app-border-strong: oklch(1 0 0 / 0.14);
+  --app-text-primary: oklch(0.96 0.01 260);
+  --app-text-secondary: oklch(0.72 0.02 260);
+  --app-text-muted: oklch(0.62 0.02 260);
+  --app-amber: #f59e0b;
+  --app-amber-bg: rgb(245 158 11 / 0.12);
+  --app-amber-text: #fbbf24;
+  --app-green: #55c85a;
+  --app-green-bg: rgb(85 200 90 / 0.12);
+  --app-green-border: rgb(85 200 90 / 0.35);
+  --brand-green: #a7e957;
+  --brand-green-text: #bbf7d0;
+  --brand-green-outline: #4ade80;
+  --app-slate: #94a3b8;
+  --app-slate-bg: rgb(148 163 184 / 0.1);
+  --sidebar-nav-active-bg: rgb(255 255 255 / 0.08);
+  --sidebar-nav-inactive: #94a3b8;
+  --app-card-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
 }
 
 @layer base {

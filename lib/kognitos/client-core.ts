@@ -90,6 +90,62 @@ export async function kognitosFetchJson<T>(
   return (text ? JSON.parse(text) : {}) as T;
 }
 
+/**
+ * Same JSON contract as {@link kognitosFetchJson} but with an explicit bearer secret
+ * (for retries, e.g. API key after PAT returns 403 on a single RPC).
+ */
+export async function kognitosFetchJsonWithBearerToken<T>(
+  path: string,
+  bearerToken: string,
+  init?: RequestInit,
+): Promise<T> {
+  const trimmed = bearerToken.trim();
+  if (!trimmed) {
+    throw new Error("kognitosFetchJsonWithBearerToken: empty bearerToken");
+  }
+  const res = await fetch(`${baseUrl()}${path}`, {
+    ...init,
+    headers: {
+      Authorization: `Bearer ${trimmed}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...init?.headers,
+    },
+  });
+  const text = await res.text();
+  if (!res.ok) {
+    throw new KognitosApiError(res.status, path, text);
+  }
+  return (text ? JSON.parse(text) : {}) as T;
+}
+
+/**
+ * Same as {@link kognitosFetchJson}, but if the request returns **403** with PAT
+ * and a distinct **API key** is configured, retry once with the API key (matches
+ * exception reply / Create Event behavior).
+ */
+export async function kognitosFetchJsonWithPat403Retry<T>(
+  path: string,
+  init?: RequestInit,
+): Promise<T> {
+  const pat = process.env.KOGNITOS_PAT?.trim();
+  const apiKey = process.env.KOGNITOS_API_KEY?.trim();
+  try {
+    return await kognitosFetchJson<T>(path, init);
+  } catch (e) {
+    if (
+      e instanceof KognitosApiError &&
+      e.status === 403 &&
+      pat &&
+      apiKey &&
+      pat !== apiKey
+    ) {
+      return kognitosFetchJsonWithBearerToken<T>(path, apiKey, init);
+    }
+    throw e;
+  }
+}
+
 function num(v: unknown): number {
   if (typeof v === "number" && Number.isFinite(v)) return v;
   if (typeof v === "string") {
@@ -367,7 +423,7 @@ export async function getRunRaw(
   const ws = requireWorkspace();
   const auto = resolveAutomationId(automationId);
   const path = `/api/v1/organizations/${encodeURIComponent(org)}/workspaces/${encodeURIComponent(ws)}/automations/${encodeURIComponent(auto)}/runs/${encodeURIComponent(runId)}`;
-  const data = await kognitosFetchJson<Record<string, unknown>>(path);
+  const data = await kognitosFetchJsonWithPat403Retry<Record<string, unknown>>(path);
   if (!data || typeof data !== "object") return null;
   return data;
 }

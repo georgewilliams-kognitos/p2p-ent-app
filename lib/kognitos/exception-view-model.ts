@@ -332,3 +332,29 @@ export type ExceptionDetailBundleDto = {
   /** Server-built Kognitos web URL for this run (null if env incomplete). */
   kognitosRunUrl: string | null;
 };
+
+/** Subset of OpenAPI `v1Event` returned after Create Event (POST …/agents/…/events). */
+export type CreateEventAckDto = {
+  eventResourceName: string | null;
+  eventState: string | null;
+  createTime: string | null;
+  userMessagePreview: string | null;
+};
+
+export function mapCreateEventResponseToAck(
+  raw: Record<string, unknown>,
+): CreateEventAckDto {
+  const name = readString(raw.name);
+  const state = readString(raw.state);
+  const createTime = readString(raw.create_time ?? raw.createTime);
+  const um = readRecord(raw.user_message ?? raw.userMessage);
+  const content = um ? readString(um.content) : undefined;
+  const preview =
+    content && content.length > 220 ? `${content.slice(0, 220)}…` : content ?? null;
+  return {
+    eventResourceName: name ?? null,
+    eventState: state ?? null,
+    createTime: createTime ?? null,
+    userMessagePreview: preview,
+  };
+}

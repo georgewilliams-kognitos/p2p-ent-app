@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Bell, LogOut, RefreshCw, Search, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { DOMAIN, getRoleConfig } from "@/lib/domain.config";
+import { getRoleConfig } from "@/lib/domain.config";
 import { queryUnreadNotificationCount } from "@/lib/queries";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -38,7 +38,9 @@ function getInitials(name: string) {
 export function Topbar() {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const hideGlobalSearch = pathname === "/exception-handling";
   const [searchValue, setSearchValue] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
   const [syncingKognitos, setSyncingKognitos] = useState(false);
@@ -108,21 +110,25 @@ export function Topbar() {
 
   return (
     <TooltipProvider>
-      <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b bg-background/95 px-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:px-6">
+      <header className="border-app-border sticky top-0 z-20 flex h-16 items-center gap-3 border-b bg-app-surface/95 px-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-app-surface/80 lg:px-6">
         <MobileSidebar />
 
-        <div className="flex-1 flex items-center justify-center lg:justify-start">
-          <div className="relative w-full max-w-sm">
-            <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder={`Search ${DOMAIN.entity.plural.toLowerCase()}…`}
-              className="w-full pl-9 h-9"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={handleSearchKeyDown}
-            />
+        {hideGlobalSearch ? (
+          <div className="min-w-0 flex-1" aria-hidden />
+        ) : (
+          <div className="flex flex-1 items-center justify-center lg:justify-start">
+            <div className="relative w-full max-w-sm">
+              <Search className="text-app-text-muted absolute left-2.5 top-1/2 size-4 -translate-y-1/2" />
+              <Input
+                placeholder="Search app..."
+                className="h-9 w-full rounded-[11px] border-app-border bg-app-surface pl-9 text-sm"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex items-center gap-2">
           <Tooltip>
@@ -172,11 +178,17 @@ export function Topbar() {
                   variant="ghost"
                   className="relative flex items-center gap-2 px-2"
                 >
-                  <Avatar className="size-8">
-                    <AvatarFallback className="bg-brand/20 text-xs font-medium">
-                      {getInitials(user.full_name)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="relative">
+                    <Avatar className="size-8 ring-1 ring-brand-green-outline">
+                      <AvatarFallback className="bg-brand-green text-brand-green-text text-xs font-medium">
+                        {getInitials(user.full_name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span
+                      className="border-app-surface ring-app-surface absolute bottom-0 right-0 size-2 rounded-full border bg-app-green ring-2"
+                      aria-hidden
+                    />
+                  </div>
                   <span className="hidden text-sm font-medium sm:inline-block">
                     {user.full_name}
                   </span>

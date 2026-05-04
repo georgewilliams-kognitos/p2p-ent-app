@@ -3,7 +3,10 @@
  * Keep in sync for list/detail mapping and reply routing (GET exception payload).
  */
 
-import { agentIdFromAgentsResourceString } from "./kognitos-resource-ids";
+import {
+  agentIdFromAgentsResourceString,
+  agentIdFromEventResourceName,
+} from "./kognitos-resource-ids";
 
 function trimStr(v: unknown): string | undefined {
   if (typeof v === "string" && v.trim()) return v.trim();
@@ -34,7 +37,12 @@ export function agentIdFromExceptionResolverRaw(
 ): string | undefined {
   const r =
     trimStr(raw.resolver) ??
-    trimStr((raw as { resolver_agent?: unknown }).resolver_agent);
-  const id = r ? agentIdFromAgentsResourceString(r) : null;
-  return id ?? undefined;
+    trimStr((raw as { resolver_agent?: unknown }).resolver_agent) ??
+    trimStr((raw as { resolverAgent?: unknown }).resolverAgent);
+  if (!r) return undefined;
+  const short = agentIdFromAgentsResourceString(r);
+  if (short) return short;
+  const fromFullPath = agentIdFromEventResourceName(r);
+  if (fromFullPath) return fromFullPath;
+  return undefined;
 }

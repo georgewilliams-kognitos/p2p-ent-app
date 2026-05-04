@@ -120,7 +120,7 @@ function SidebarNav({ collapsed = false, onToggleCollapsed }: SidebarNavProps) {
                 </TooltipTrigger>
                 <TooltipContent side="right">Expand menu</TooltipContent>
               </Tooltip>
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand text-primary-foreground">
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-[11px] bg-brand-green text-brand-green-text">
                 <LogoIcon className="size-4" />
               </div>
             </div>
@@ -142,20 +142,20 @@ function SidebarNav({ collapsed = false, onToggleCollapsed }: SidebarNavProps) {
                 </TooltipTrigger>
                 <TooltipContent side="right">Collapse menu</TooltipContent>
               </Tooltip>
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand text-primary-foreground">
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-[11px] bg-brand-green text-brand-green-text">
                 <LogoIcon className="size-4" />
               </div>
-              <span className="min-w-0 flex-1 truncate text-base font-semibold tracking-normal">
+              <span className="min-w-0 flex-1 truncate text-base font-semibold tracking-normal text-sidebar-foreground">
                 {DOMAIN.appName}
               </span>
             </div>
           )
         ) : (
           <div className="flex h-16 shrink-0 items-center gap-2.5 border-b border-sidebar-border px-5">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-brand text-primary-foreground">
+            <div className="flex size-8 items-center justify-center rounded-[11px] bg-brand-green text-brand-green-text">
               <LogoIcon className="size-4" />
             </div>
-            <span className="text-base font-semibold tracking-normal">
+            <span className="text-base font-semibold tracking-normal text-sidebar-foreground">
               {DOMAIN.appName}
             </span>
           </div>
@@ -176,11 +176,11 @@ function SidebarNav({ collapsed = false, onToggleCollapsed }: SidebarNavProps) {
             const parentLooksActive = parentPathActive || anyChildActive;
 
             const parentClassName = cn(
-              "flex items-center rounded-md py-2 text-sm font-medium transition-colors",
+              "flex items-center rounded-[11px] py-2 text-sm font-medium transition-colors",
               railCollapsed ? "justify-center px-0" : "gap-3 px-3",
               parentLooksActive
                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                : "text-sidebar-muted hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                : "text-sidebar-muted hover:bg-white/[0.06] hover:text-sidebar-accent-foreground",
             );
 
             const parentLink = (
@@ -216,10 +216,10 @@ function SidebarNav({ collapsed = false, onToggleCollapsed }: SidebarNavProps) {
                         key={child.href}
                         href={child.href}
                         className={cn(
-                          "flex items-center gap-3 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                          "flex items-center gap-3 rounded-[11px] px-3 py-1.5 text-sm font-medium transition-colors",
                           cActive
                             ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                            : "text-sidebar-muted hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                            : "text-sidebar-muted hover:bg-white/[0.06] hover:text-sidebar-accent-foreground",
                         )}
                       >
                         <ChildIcon className="size-[18px] shrink-0" />
@@ -241,12 +241,12 @@ function SidebarNav({ collapsed = false, onToggleCollapsed }: SidebarNavProps) {
                   const childLink = (
                     <Link
                       href={child.href}
-                      className={cn(
-                        "flex items-center justify-center rounded-md py-2 text-sm font-medium transition-colors",
-                        cActive
-                          ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                          : "text-sidebar-muted hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
-                      )}
+                        className={cn(
+                          "flex items-center justify-center rounded-[11px] py-2 text-sm font-medium transition-colors",
+                          cActive
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                            : "text-sidebar-muted hover:bg-white/[0.06] hover:text-sidebar-accent-foreground",
+                        )}
                     >
                       <ChildIcon className="size-[18px] shrink-0" />
                     </Link>
@@ -276,11 +276,18 @@ function SidebarNav({ collapsed = false, onToggleCollapsed }: SidebarNavProps) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="flex justify-center">
-                    <Avatar className="size-9 shrink-0">
-                      <AvatarFallback className="bg-brand/20 text-xs font-medium">
-                        {getInitials(user.full_name)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="relative shrink-0">
+                      <Avatar className="size-9 ring-1 ring-brand-green-outline">
+                        <AvatarFallback className="bg-brand-green text-brand-green-text text-xs font-medium">
+                          {getInitials(user.full_name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span
+                        className="border-navy-950 ring-navy-950 absolute bottom-0 right-0 size-2.5 rounded-full border bg-app-green ring-2"
+                        aria-hidden
+                        title="Online"
+                      />
+                    </div>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="right" className="max-w-[220px]">
@@ -292,11 +299,18 @@ function SidebarNav({ collapsed = false, onToggleCollapsed }: SidebarNavProps) {
               </Tooltip>
             ) : (
               <div className="flex items-center gap-3">
-                <Avatar className="size-9 shrink-0">
-                  <AvatarFallback className="bg-brand/20 text-xs font-medium">
-                    {getInitials(user.full_name)}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative shrink-0">
+                  <Avatar className="size-9 ring-1 ring-brand-green-outline">
+                    <AvatarFallback className="bg-brand-green text-brand-green-text text-xs font-medium">
+                      {getInitials(user.full_name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span
+                    className="border-navy-950 ring-navy-950 absolute bottom-0 right-0 size-2.5 rounded-full border bg-app-green ring-2"
+                    aria-hidden
+                    title="Online"
+                  />
+                </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{user.full_name}</p>
                   <Badge variant="secondary" className="mt-0.5 text-[10px]">

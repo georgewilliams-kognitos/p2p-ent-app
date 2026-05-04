@@ -32,6 +32,28 @@ export function exceptionShortIdFromExceptionResourceName(
   return null;
 }
 
+/**
+ * Conversation event `name` per OpenAPI:
+ * `.../runs/{run}/agents/{agent}/events/{event_id}` — some responses omit `events` or vary casing.
+ */
+export function agentIdFromEventResourceName(name: string): string | null {
+  const t = name.trim();
+  if (!t) return null;
+  const runAgent = t.match(/\/runs\/[^/]+\/agents\/([^/\s?#]+)(?:\/|$)/);
+  if (runAgent?.[1]?.trim()) return runAgent[1].trim();
+  const parts = t.split("/").filter(Boolean);
+  const i = parts.indexOf("agents");
+  if (i >= 0 && i + 1 < parts.length) {
+    const id = parts[i + 1]?.trim();
+    if (!id) return null;
+    if (i + 2 < parts.length && parts[i + 2] === "events") return id;
+    if (i >= 1 && parts[i - 1] === "runs") return id;
+  }
+  const loose = t.match(/\/agents\/([^/\s?#]+)(?:\/|$)/);
+  if (loose?.[1]?.trim()) return loose[1].trim();
+  return agentIdFromAgentsResourceString(t);
+}
+
 /** `agents/{agentId}` (short resource reference from v1Exception.resolver, etc.). */
 export function agentIdFromAgentsResourceString(s: string): string | null {
   const t = s.trim();

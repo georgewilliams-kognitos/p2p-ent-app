@@ -43,7 +43,7 @@ export default function DashboardLayout({
 
   return (
     <KognitosSetupGate>
-      <div className="min-h-svh bg-muted/30">
+      <div className="min-h-svh bg-app-page-bg">
         <Sidebar
           collapsed={sidebarCollapsed}
           onToggleCollapsed={() => setSidebarCollapsed((c) => !c)}
