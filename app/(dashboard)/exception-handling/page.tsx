@@ -5,6 +5,7 @@ import {
   useDeferredValue,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -470,6 +471,8 @@ export default function ExceptionHandlingPage() {
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  /** True on first paint and after changing status tab — next full list load selects the first row. */
+  const pendingSelectFirstRef = useRef(true);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState<string | null>(null);
   const [bundle, setBundle] = useState<ExceptionDetailBundleDto | null>(null);
@@ -505,6 +508,8 @@ export default function ExceptionHandlingPage() {
           setListError(data.error ?? res.statusText);
           setItems([]);
           setNextPageToken(null);
+          setSelectedId(null);
+          pendingSelectFirstRef.current = false;
           return;
         }
         const next = data.items ?? [];
@@ -512,12 +517,21 @@ export default function ExceptionHandlingPage() {
           setItems((prev) => [...prev, ...next]);
         } else {
           setItems(next);
+          if (next.length === 0) {
+            setSelectedId(null);
+            pendingSelectFirstRef.current = false;
+          } else if (pendingSelectFirstRef.current) {
+            setSelectedId(next[0].exceptionId);
+            pendingSelectFirstRef.current = false;
+          }
         }
         setNextPageToken(data.nextPageToken ?? null);
       } catch (e) {
         setListError(e instanceof Error ? e.message : "load_failed");
         setItems([]);
         setNextPageToken(null);
+        setSelectedId(null);
+        pendingSelectFirstRef.current = false;
       } finally {
         setListLoading(false);
       }
@@ -646,8 +660,8 @@ export default function ExceptionHandlingPage() {
                     : "border-app-border text-app-text-secondary hover:bg-app-surface-muted border bg-app-surface",
                 )}
                 onClick={() => {
+                  pendingSelectFirstRef.current = true;
                   setStateFilter(t.value);
-                  setSelectedId(null);
                 }}
               >
                 {t.label}

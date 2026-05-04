@@ -96,8 +96,6 @@ test.describe("Exception handling — interpreter message", () => {
   }) => {
     await page.goto("/exception-handling", { waitUntil: "domcontentloaded" });
 
-    await page.getByRole("button", { name: /E2E interpreter placement/i }).click();
-
     const whatHappened = page.getByRole("region", { name: "What happened" });
     await expect(whatHappened).toBeVisible();
     await expect(whatHappened.getByText("Interpreter message")).toHaveCount(0);
