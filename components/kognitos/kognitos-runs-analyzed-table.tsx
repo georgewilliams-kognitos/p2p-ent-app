@@ -336,6 +336,10 @@ export function KognitosRunsAnalyzedTable({
   const [invoiceViewer, setInvoiceViewer] = useState<{
     pdfUrl: string;
     runId: string;
+    /** Display label for the dialog header — parity with the v2 chat
+     *  attachment surface, where the title shows the filename (e.g.
+     *  invoice number) instead of a generic "Document Processing". */
+    label: string;
   } | null>(null);
   const [reanalyzeRun, setReanalyzeRun] = useState<KognitosDashboardRun | null>(
     null,
@@ -592,6 +596,7 @@ export function KognitosRunsAnalyzedTable({
                                       setInvoiceViewer({
                                         pdfUrl,
                                         runId: row.id,
+                                        label: row.invoiceNumber,
                                       });
                                     }}
                                     className={cn(
@@ -947,11 +952,16 @@ export function KognitosRunsAnalyzedTable({
         >
           <DialogHeader className="shrink-0 border-b border-white/[0.07] bg-zinc-900 px-4 py-2 text-left">
             <DialogTitle className="text-base font-medium text-zinc-50">
-              Document Processing
+              {invoiceViewer?.label ?? "Document Processing"}
             </DialogTitle>
           </DialogHeader>
           {invoiceViewer ? (
+            // `key` resets every internal ref (zoom cap, focused field,
+            // page number, panel state) when the operator opens a
+            // different invoice — same defense-in-depth pattern v2's
+            // chat-launched viewer uses.
             <InvoicePdfHighlightViewer
+              key={invoiceViewer.runId}
               pdfUrl={invoiceViewer.pdfUrl}
               runId={invoiceViewer.runId}
             />
